@@ -7,9 +7,9 @@
       <!-- <x-input title="验证码">
         <img slot="right-full-height" src="https://ws1.sinaimg.cn/large/663d3650gy1fq684go3glj203m01hmwy.jpg">
       </x-input> -->
-        <x-input title="手机号" class="weui-vcode">
+        <x-input title="手机号" class="weui-vcode" v-model="phoneNo">
         </x-input>
-        <x-input title="验证码" class="weui-vcode">
+        <x-input title="验证码" class="weui-vcode" v-model="verificationCode">
           <x-button slot="right" type="primary" mini>发送验证码</x-button>
         </x-input>
       </group>
@@ -18,7 +18,7 @@
         <br>
         <check-icon :value.sync="agreement2">我已阅读并同意<router-link to="/">>销户退费说明</router-link></check-icon>
       </div>
-       <x-button type="primary" style="margin-top: 1rem;">确定</x-button>
+       <x-button type="primary" style="margin-top: 1rem;" @click="submitFn">确定</x-button>
     </div>
     <div class="footMessg">
       <p>技术支持：深圳市云天数字科技有限公司</p>
@@ -27,6 +27,7 @@
 </template>
 <script>
 import { XInput, Group, XButton, Cell, CheckIcon } from 'vux'
+import {ApibindingPhone} from '@/api'
 export default {
   components: {
     XInput,
@@ -38,8 +39,23 @@ export default {
   data () {
     return {
       agreement1: false,
-      agreement2: false
+      agreement2: false,
+      phoneNo: '',
+      verificationCode: ''
     }
+  },
+  methods: {
+    async submitFn () {
+      const data = {
+        phoneNo: this.phoneNo,
+        verificationCode: this.verificationCode
+      }
+      const res = await ApibindingPhone(data)
+      console.log(res)
+    }
+  },
+  mounted () {
+    this.submitFn()
   }
 }
 </script>
